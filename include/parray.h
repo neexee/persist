@@ -9,10 +9,9 @@ namespace persist {
 template <typename T, size_t N> class array_iterator;
 template <typename T, size_t N> class array_const_iterator;
 
-template <typename T, size_t N, template <typename T> class _Alloc = std::allocator>
+template <typename T, size_t N, class A = std::allocator<T>>
 class parray {
 public:
-	typedef _Alloc<T> A; 
     typedef typename A::value_type value_type; 
     typedef typename A::reference reference;
     typedef typename A::const_reference const_reference;
@@ -92,13 +91,10 @@ public:
 private:
 	typedef size_t version_type;
 	
-	template <typename VT> 
-	using map_allocator_type = _Alloc<std::pair<const version_type, VT>>;
-	
-	typedef std::map<version_type, T, std::less<version_type>, map_allocator_type<T>> updatemap_type;
+	typedef std::map<version_type, T, std::less<version_type>, A> updatemap_type;
 
 	std::array<T, N> values;
-	std::map<size_type, updatemap_type, std::less<version_type>, map_allocator_type<updatemap_type>> updates;
+	std::map<size_type, updatemap_type, std::less<version_type>, A> updates;
 	size_type version;
 };
 }
