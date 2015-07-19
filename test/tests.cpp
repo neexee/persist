@@ -1,6 +1,7 @@
 #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE Suites
 #include "parray.h"
+#include "plist.h"
 #include <boost/test/unit_test.hpp>
 BOOST_AUTO_TEST_SUITE(parrayTest)
 struct Fixture
