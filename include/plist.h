@@ -5,8 +5,8 @@
 
 namespace persist {
 
-template <typename T> class list_iterator;
-template <typename T> class list_const_iterator;
+template <typename T, bool> class list_iterator;
+template <typename T, bool> class list_const_iterator;
 
 template <typename T, class A = std::allocator<T>>
 class list {
@@ -17,12 +17,14 @@ public:
     typedef typename A::difference_type difference_type;
     typedef typename A::size_type size_type;
     typedef typename A::pointer pointer;
+	typedef typename A::const_pointer const_pointer;
 	
-	typedef list_iterator<T> iterator;
-	typedef list_const_iterator<T> const_iterator;
+    typedef list_iterator<T, false> iterator;
+	typedef list_iterator<T, true> const_iterator;
+    
     friend iterator;
     friend const_iterator;
-
+    
     list() {
     }
 

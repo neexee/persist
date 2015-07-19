@@ -6,9 +6,7 @@
 
 namespace persist {
 
-template <typename T, size_t N> class array_iterator;
-template <typename T, size_t N> class array_const_iterator;
-
+template <typename T, size_t N, bool> class array_iterator;
 template <typename T, size_t N, class A = std::allocator<T>>
 class parray {
 public:
@@ -18,9 +16,10 @@ public:
     typedef typename A::difference_type difference_type;
     typedef typename A::size_type size_type;
     typedef typename A::pointer pointer;
+	typedef typename A::const_pointer const_pointer;
 	
-	typedef array_iterator<T, N> iterator;
-	typedef array_const_iterator<T, N> const_iterator;
+	typedef array_iterator<T, N, false> iterator;
+	typedef array_iterator<T, N, true> const_iterator;
 
     parray() {
     }
