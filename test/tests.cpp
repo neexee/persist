@@ -21,6 +21,7 @@ struct Fixture
 {
 	persist::list<int> list = {1, 2, 3, 4, 5};
 };
+
 BOOST_FIXTURE_TEST_CASE(testListPersistency, Fixture)
 {
 	auto it = std::next(list.cbegin(), 2);
@@ -30,6 +31,5 @@ BOOST_FIXTURE_TEST_CASE(testListPersistency, Fixture)
 
 	BOOST_CHECK_EQUAL(*std::prev(it),  2);
 	BOOST_CHECK_EQUAL(*std::next(it),  4);
-
 }
 BOOST_AUTO_TEST_SUITE_END()

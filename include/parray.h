@@ -39,8 +39,9 @@ public:
 */
 	const_reference lookup(size_type index, size_type version) const {
         if(this->version < version) {
-        	throw std::out_of_range("version is not created yet");
+        	throw std::out_of_range("version is not created yet"); // Is it container problem?
         }
+
 		auto update_iterator = updates.find(index);
     	if (update_iterator != updates.end()) {
             auto& updatemap = update_iterator->second;
@@ -91,8 +92,7 @@ public:
  	}
 private:
 	static_assert(N > 0, "array size must be > 0");
-	typedef size_t version_type;
-	
+	typedef size_type version_type;	
 	typedef std::map<version_type, T, std::less<version_type>, A> updatemap_type;
 
 	std::array<T, N> values;

@@ -30,14 +30,10 @@ public:
         list_iterator() {
         }
 
-        //iterator(const iterator&)
-        ~list_iterator(){}
-
-        //iterator& operator=(const iterator&);
         bool operator==(const list_iterator& rhs) const {
             return version == rhs.version && (node->prev == rhs.node->prev);
-
         }
+
         bool operator!=(const list_iterator& rhs) const {
             return !(*this == rhs);
         }
@@ -84,14 +80,17 @@ public:
         reference operator*() {
             return node->data;
         }
-        pointer operator->();
+        pointer operator->() {
+            return &node->data;
+        }
 
         friend class list_iterator<true>;
         friend class list;
     private:
         typedef typename list::nodeptr nodeptr;
-        list_iterator(const nodeptr& node, size_type version) : node (node), version(version) {
-        }
+
+        list_iterator(const nodeptr& node, size_type version) : node (node), version(version) {}
+        
         nodeptr node;
         size_type version;
     };
@@ -103,17 +102,11 @@ public:
     }
 
     template <class InputIterator>
-    list (InputIterator first, InputIterator last);
-
-    list (const list& x);
-
-    list (list&& x);
-    
-    list (std::initializer_list<T> il): version (0) {
-        startnode = std::make_shared<node>(*il.begin(), std::shared_ptr<node>());
+    list (InputIterator first, InputIterator last) : version(0) {
+        startnode = std::make_shared<node>(*first, std::shared_ptr<node>());
         nodeptr prev = startnode;
         nodeptr tail;
-        for (auto it = std::next(il.begin()); it != il.end(); ++it) {
+        for (auto it = std::next(first); it != last; ++it) {
             tail = std::make_shared<node>(*it, prev);
             auto& prevnextmap = prev->next;
             prevnextmap.insert(std::make_pair(0, tail));
@@ -121,7 +114,10 @@ public:
         }
         endnode = tail;
     }
-    
+
+    list (std::initializer_list<T> il): list(il.begin(), il.end()) {
+    }
+
     iterator insert(const_iterator pos, const T& value ) {
         auto next = pos.node;
         nodeptr prev;
@@ -188,7 +184,7 @@ private:
             this->prev[version] = prev;
         }
 
-        node(const T& data, nodeptr prev): data(data){
+        node(const T& data, nodeptr prev): data(data) {
             this->prev[0] = prev;
         }
 

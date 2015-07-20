@@ -21,9 +21,7 @@ public:
 
     array_iterator(const array_iterator<T, N, is_const_iterator>& rhs): array(rhs.array), index(rhs.index) {
     }
-    ~array_iterator(){}
 
-    //iterator& operator=(const iterator&);
     bool operator==(const array_iterator& rhs) const {
     	return index == rhs.index;
     }
@@ -40,10 +38,26 @@ public:
         return *this;
     }
 
+    array_iterator operator++(int) {
+       auto prev = *this;
+       ++*this;
+       return prev;
+    }
+
+    array_iterator operator--(int) {
+        auto prev = *this;
+        --*this;
+        return prev;
+    }
+
     reference operator*() {
     	return array.lookup(index, array.most_recent_version(index));
     }
-    pointer operator->() const;
+    
+    pointer operator->() const {
+        return &array.lookup(index, array.most_recent_version(index));
+    }
+
 private:
 	data_reference array;
     size_type index;
