@@ -1,13 +1,13 @@
 IDIR =../include
 CC=g++
-CFLAGS=-std=c++1y -I$(IDIR)
+CFLAGS=-std=c++1y -I$(IDIR) -g
 
 ODIR=obj
 LDIR =../lib
 
 LIBS=
 
-_DEPS = parray.h
+_DEPS = parray.h parrayiter.h plist.h putil.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
 _OBJ = main.o

@@ -7,7 +7,7 @@ LDIR =../lib
 
 LIBS=-lboost_unit_test_framework
 
-_DEPS = parray.h plist.h parrayiter.h plistiter.h
+_DEPS = parray.h plist.h parrayiter.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
 _OBJ = tests.o

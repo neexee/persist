@@ -7,6 +7,7 @@
 namespace persist {
 
 template <typename T, size_t N, bool> class array_iterator;
+
 template <typename T, size_t N, class A = std::allocator<T>>
 class parray {
 public:
@@ -21,14 +22,14 @@ public:
 	typedef array_iterator<T, N, false> iterator;
 	typedef array_iterator<T, N, true> const_iterator;
 
-    parray() {
+    parray(): version(0) {
     }
 
-    parray(std::initializer_list<T> list) {
+    parray(std::initializer_list<T> list) : parray() {
 		std::copy_n(list.begin(), N, values.begin());
     }
 
-    parray(const std::array<T, N>& array) : values(array) {
+    parray(const std::array<T, N>& array) : version(0), values(array) {
     }
 /*
 	reference lookup(size_type index, size_type version) {
@@ -42,14 +43,15 @@ public:
         }
 		auto update_iterator = updates.find(index);
     	if (update_iterator != updates.end()) {
-            auto updatemap = update_iterator->second;
-            auto most_recent_update = updatemap.lower_bound(version);
-            if (most_recent_update->first <= version) {
-                return most_recent_update->second;
+            auto& updatemap = update_iterator->second;
+            auto most_recent_update = updatemap.upper_bound(version);
+            if(most_recent_update != updatemap.begin()) {
+            	return (--most_recent_update)->second;
             }
     	}
     	return values[index];
 	}
+
 	void update(size_type index, T value) {
        	++version;
        	auto& updatemap = updates[index];
@@ -88,6 +90,7 @@ public:
  	    return version == rhs.version && values == rhs.values && updates == rhs.updates;
  	}
 private:
+	static_assert(N > 0, "array size must be > 0");
 	typedef size_t version_type;
 	
 	typedef std::map<version_type, T, std::less<version_type>, A> updatemap_type;

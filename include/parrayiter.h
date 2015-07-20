@@ -13,15 +13,19 @@ public:
     typedef typename std::conditional<is_const_iterator, typename C::const_reference, typename C::reference>::type reference;
     typedef typename std::conditional<is_const_iterator, const C&, C&>::type data_reference;
     
+    array_iterator() {
+    }
+    
     array_iterator(data_reference array, size_type index) : array(array), index(index) {
     }
 
-    //iterator(const iterator&)
+    array_iterator(const array_iterator<T, N, is_const_iterator>& rhs): array(rhs.array), index(rhs.index) {
+    }
     ~array_iterator(){}
 
     //iterator& operator=(const iterator&);
     bool operator==(const array_iterator& rhs) const {
-    	return array == rhs.array && index == rhs.index;
+    	return index == rhs.index;
     }
     bool operator!=(const array_iterator& rhs) const {
     	return !(*this == rhs);
